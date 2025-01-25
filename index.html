@@ -67,7 +67,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.umd.min.js"></script>
     <script>
-        const contractAddress = "<DEPLOYED_CONTRACT_ADDRESS>"; // Replace with your contract address
+        const contractAddress = "0xB91F8D7814C965F1d36aE0583a2D97dEF3191829"; // Replace with your deployed contract address
         const abi = [
             // Minimal ABI for ERC-20 Transfer and balanceOf
             "function balanceOf(address owner) view returns (uint256)",
@@ -79,14 +79,21 @@
 
         async function connectWallet() {
             if (window.ethereum) {
-                provider = new ethers.providers.Web3Provider(window.ethereum);
-                await provider.send("eth_requestAccounts", []);
-                signer = provider.getSigner();
-                contract = new ethers.Contract(contractAddress, abi, signer);
-                updateBalance();
-                listenForTransfers();
+                try {
+                    provider = new ethers.providers.Web3Provider(window.ethereum);
+                    await provider.send("eth_requestAccounts", []);
+                    signer = provider.getSigner();
+                    contract = new ethers.Contract(contractAddress, abi, signer);
+                    updateBalance();
+                    listenForTransfers();
+                    alert("Wallet connected successfully!");
+                } catch (error) {
+                    console.error("Connection failed: ", error);
+                    alert("Failed to connect to MetaMask. Please try again.");
+                }
             } else {
-                alert("Please install MetaMask!");
+                alert("MetaMask is not installed. Redirecting to MetaMask installation page.");
+                window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn", "_blank");
             }
         }
 
