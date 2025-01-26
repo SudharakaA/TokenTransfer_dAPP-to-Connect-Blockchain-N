@@ -1,4 +1,3 @@
-
 const contractAddress = "0xB91F8D7814C965F1d36aE0583a2D97dEF3191829"; // Replace with your deployed contract address
 const abi = [
     // Minimal ABI for ERC-20 Transfer and balanceOf
@@ -14,7 +13,7 @@ async function connectWallet() {
         // Initialize WalletConnect Provider with actual Infura Project ID
         provider = new WalletConnectProvider.Web3Provider({
             rpc: {
-                5: "https://goerli.infura.io/v3/YOUR_INFURA_PROJECT_ID" // Replace with your actual Infura Project ID
+                5: "https://goerli.infura.io/v3/YOUR_INFURA_PROJECT_ID" // <-- Replace with your actual Infura Project ID
             },
             chainId: 5 // Goerli Testnet
         });
