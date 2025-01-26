@@ -1,0 +1,66 @@
+
+/* Custom Styles */
+
+body {
+    background-color: #f7f9fc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    background: linear-gradient(135deg, #ffffff, #e6f7ff);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #007bff;
+    text-shadow: 1px 1px #d0e7ff;
+}
+
+h3 {
+    color: #0056b3;
+}
+
+#verifiedAccount, #verificationStatus {
+    font-size: 1.1rem;
+}
+
+#balance {
+    font-weight: bold;
+    color: #28a745;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #1e7e34;
+}
+
+#transferLogs {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.list-group-item {
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.list-group-item:hover {
+    background-color: #d1ecf1;
+    transform: scale(1.02);
+}

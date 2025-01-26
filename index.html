@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manifestation Token Transfer</title>
+    <!-- Add Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoWvR8WhwAGn1y1rKU5u4lKlfS1tp4nBoMxv9ApjqXMrhZ8"
+        crossorigin="anonymous"
+    >
+    <!-- Link to External CSS -->
+    <link rel="stylesheet" href="css/styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,29 +58,59 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Manifestation Token Transfer</h2>
-        <!-- Add paragraphs to display the authenticated account and verification status -->
-        <p id="verifiedAccount"></p>
-        <p id="verificationStatus"></p>
-        <button class="button" id="connectWallet">Connect Wallet</button>
-        <p>Your Balance: <span id="balance">0</span> MNF</p>
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center">Manifestation Token Transfer</h2>
+        <!-- Verified Account and Status -->
+        <div class="mb-3">
+            <p id="verifiedAccount" class="fw-bold"></p>
+            <p id="verificationStatus" class="fw-bold"></p>
+        </div>
+        <!-- Connect Wallet Button -->
+        <div class="d-grid gap-2 mb-4">
+            <button class="btn btn-primary btn-lg" id="connectWallet">Connect Wallet</button>
+        </div>
+        <!-- Balance Display -->
+        <div class="mb-4">
+            <h5>Your Balance: <span id="balance">0</span> MNF</h5>
+        </div>
         <hr>
-        <h3>Transfer Tokens</h3>
-        <form id="transferForm">
-            <input type="text" id="recipient" placeholder="Recipient Address" required>
-            <input type="number" id="amount" placeholder="Amount" required>
-            <button class="button" type="submit">Send</button>
-        </form>
+        <!-- Transfer Tokens Form -->
+        <div class="mb-4">
+            <h3 class="mb-3">Transfer Tokens</h3>
+            <form id="transferForm">
+                <div class="mb-3">
+                    <input type="text" id="recipient" class="form-control" placeholder="Recipient Address" required>
+                </div>
+                <div class="mb-3">
+                    <input type="number" id="amount" class="form-control" placeholder="Amount" required min="1">
+                </div>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-success" type="submit">Send</button>
+                </div>
+            </form>
+        </div>
         <hr>
-        <h3>Recent Transfers</h3>
-        <ul id="transferLogs"></ul>
+        <!-- Recent Transfers Log -->
+        <div>
+            <h3 class="mb-3">Recent Transfers</h3>
+            <ul id="transferLogs" class="list-group">
+                <!-- Transfer logs will be appended here -->
+            </ul>
+        </div>
     </div>
 
+    <!-- Include Bootstrap JS Bundle -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+741Zl5EOegym5vCja2KRbNQSW6+g"
+        crossorigin="anonymous"
+    ></script>
     <!-- Include ethers.js -->
     <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.umd.min.js"></script>
     <!-- Include WalletConnect Provider -->
     <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider/dist/umd/index.min.js"></script>
+    <!-- Link to External JS -->
+    <script src="js/scripts.js"></script>
     <script>
         const contractAddress = "0xB91F8D7814C965F1d36aE0583a2D97dEF3191829"; // Replace with your deployed contract address
         const abi = [
