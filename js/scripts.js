@@ -11,18 +11,18 @@ let provider, signer, contract;
 async function connectWallet() {
     try {
         // Initialize WalletConnect Provider with actual Infura Project ID
-        provider = new WalletConnectProvider.Web3Provider({
-            rpc: {
-                5: "https://goerli.infura.io/v3/YOUR_INFURA_PROJECT_ID" // <-- Replace with your actual Infura Project ID
-            },
-            chainId: 5 // Goerli Testnet
+        provider = new WalletConnectProvider({
+            infuraId: "YOUR_INFURA_PROJECT_ID" // <-- Replace with your actual Infura Project ID
         });
+
+        // Create an ethers provider
+        const web3Provider = new ethers.providers.Web3Provider(provider);
 
         console.log("Initializing WalletConnect Provider...");
 
         // Enable session (triggers QR Code modal)
-        await provider.send("eth_requestAccounts", []);
-        signer = provider.getSigner();
+        await provider.enable();
+        signer = web3Provider.getSigner();
         const account = await signer.getAddress(); // Get the account address
         contract = new ethers.Contract(contractAddress, abi, signer);
 
@@ -53,7 +53,7 @@ async function connectWallet() {
         }
 
         // Listen for disconnect
-        provider.provider.on("disconnect", (code, reason) => {
+        provider.on("disconnect", (code, reason) => {
             console.log(`Disconnected: ${code}, Reason: ${reason}`);
             resetApp();
         });
