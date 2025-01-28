@@ -105,18 +105,32 @@
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+741Zl5EOegym5vCja2KRbNQSW6+g"
         crossorigin="anonymous"
     ></script>
-    <!-- Include ethers.js -->
-    <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.umd.min.js"></script>
-    <!-- Include WalletConnect Provider -->
-    <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider/dist/umd/index.min.js"></script>
+    <!-- Include ethers.js v5 -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <!-- Include WalletConnect Provider with a specific compatible version -->
+    <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
     <!-- Link to External JS -->
     <script src="js/scripts.js"></script>
 
-    <!-- Remove any duplicated inline scripts -->
-    <!--
     <script>
-        // ...duplicated JavaScript code...
+        // Verify that ethers.js is loaded
+        if (typeof ethers === 'undefined') {
+            console.error("Ethers.js failed to load.");
+            alert("Failed to load ethers.js. Please check your internet connection and try again.");
+        } else {
+            console.log("Ethers.js successfully loaded.");
+        }
+
+        // Verify that WalletConnectProvider is loaded
+        if (typeof WalletConnectProvider === 'undefined') {
+            console.error("WalletConnectProvider failed to load.");
+            alert("Failed to load WalletConnectProvider. Please check your internet connection and try again.");
+        } else {
+            console.log("WalletConnectProvider successfully loaded.");
+        }
+
+        // Attach transferTokens function to the form submission
+        document.getElementById("transferForm").addEventListener("submit", transferTokens);
     </script>
-    -->
 </body>
 </html>

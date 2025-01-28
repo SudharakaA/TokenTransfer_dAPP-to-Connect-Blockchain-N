@@ -8,15 +8,35 @@ const abi = [
 
 let provider, signer, contract;
 
+// Add the following lines to verify ethers and WalletConnectProvider are loaded
+console.log("Ethers.js loaded:", window.ethers);
+console.log("WalletConnectProvider loaded:", window.WalletConnectProvider);
+
+// Function to initialize connection only if ethers and WalletConnectProvider are available
 async function connectWallet() {
+    if (!window.ethers) {
+        console.error("Ethers.js is not loaded.");
+        alert("Ethers.js is not loaded. Please refresh the page.");
+        return;
+    }
+    if (!window.WalletConnectProvider) {
+        console.error("WalletConnectProvider is not loaded.");
+        alert("WalletConnectProvider is not loaded. Please refresh the page.");
+        return;
+    }
+
     try {
         // Initialize WalletConnect Provider with actual Infura Project ID
-        provider = new WalletConnectProvider({
-            infuraId: "YOUR_INFURA_PROJECT_ID" // <-- Replace with your actual Infura Project ID
+        provider = new window.WalletConnectProvider.default({ // Use .default for UMD build
+            infuraId: "YOUR_ACTUAL_INFURA_PROJECT_ID" // <-- Ensure this is your actual Infura Project ID
         });
 
-        // Create an ethers provider
-        const web3Provider = new ethers.providers.Web3Provider(provider);
+        console.log("WalletConnectProvider initialized:", provider);
+
+        // Create an ethers provider using window.ethers
+        const web3Provider = new window.ethers.providers.Web3Provider(provider); // Access via window.ethers
+
+        console.log("Web3Provider created:", web3Provider);
 
         console.log("Initializing WalletConnect Provider...");
 
@@ -24,7 +44,7 @@ async function connectWallet() {
         await provider.enable();
         signer = web3Provider.getSigner();
         const account = await signer.getAddress(); // Get the account address
-        contract = new ethers.Contract(contractAddress, abi, signer);
+        contract = new window.ethers.Contract(contractAddress, abi, signer); // Access via window.ethers
 
         console.log(`Connected account: ${account}`);
 
@@ -37,7 +57,7 @@ async function connectWallet() {
         console.log(`Signature received: ${signature}`);
 
         // Verify the signature to ensure authenticity
-        const recoveredAddress = ethers.utils.verifyMessage(message, signature);
+        const recoveredAddress = window.ethers.utils.verifyMessage(message, signature); // Access via window.ethers.utils
         if (recoveredAddress.toLowerCase() === account.toLowerCase()) {
             // Signature is valid
             console.log("Signature verification successful.");
@@ -59,8 +79,9 @@ async function connectWallet() {
         });
 
     } catch (error) {
-        console.error("Connection or authentication failed: ", error);
-        alert("Failed to connect or authenticate. Please try again.");
+        console.error("Connection or authentication failed: ", error.message); // Enhanced logging
+        // Optionally, display detailed error to user for easier debugging
+        alert(`Failed to connect or authenticate: ${error.message}`);
     }
 }
 
@@ -119,7 +140,7 @@ async function updateBalance() {
     try {
         const address = await signer.getAddress();
         const balance = await contract.balanceOf(address);
-        document.getElementById("balance").textContent = ethers.utils.formatUnits(balance, 18);
+        document.getElementById("balance").textContent = window.ethers.utils.formatUnits(balance, 18); // Changed to window.ethers.utils
     } catch (error) {
         console.error("Failed to fetch balance: ", error);
         alert("Failed to fetch balance. Please try again.");
@@ -132,7 +153,7 @@ async function transferTokens(event) {
     const amount = document.getElementById("amount").value;
 
     // Input Validation
-    if (!ethers.utils.isAddress(recipient)) {
+    if (!window.ethers.utils.isAddress(recipient)) { // Changed to window.ethers.utils
         alert("Invalid recipient address.");
         return;
     }
@@ -142,7 +163,7 @@ async function transferTokens(event) {
     }
 
     try {
-        const tx = await contract.transfer(recipient, ethers.utils.parseUnits(amount, 18));
+        const tx = await contract.transfer(recipient, window.ethers.utils.parseUnits(amount, 18)); // Changed to window.ethers.utils
         await tx.wait();
         alert("Transfer Successful");
         updateBalance();
@@ -159,7 +180,7 @@ function listenForTransfers() {
         log.innerHTML = `
             <span><strong>From:</strong> ${from}</span>
             <span><strong>To:</strong> ${to}</span>
-            <span><strong>Amount:</strong> ${ethers.utils.formatUnits(value, 18)} MNF</span>
+            <span><strong>Amount:</strong> ${window.ethers.utils.formatUnits(value, 18)} MNF</span> // Changed to window.ethers.utils
         `;
         document.getElementById("transferLogs").prepend(log); // Add to the top
     });
