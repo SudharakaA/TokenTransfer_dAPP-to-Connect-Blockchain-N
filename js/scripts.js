@@ -174,3 +174,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         });
     });
 });
+
+// Add the following lines to attach the connectWallet function to the Connect Wallet button
+document.getElementById("connectWallet").addEventListener("click", connectWallet);
