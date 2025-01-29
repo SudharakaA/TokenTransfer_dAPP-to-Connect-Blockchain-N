@@ -107,8 +107,6 @@
     ></script>
     <!-- Include ethers.js v5 -->
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <!-- Include WalletConnect Provider with a specific compatible version -->
-    <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
     <!-- Link to External JS -->
     <script src="js/scripts.js"></script>
 
@@ -121,12 +119,12 @@
             console.log("Ethers.js successfully loaded.");
         }
 
-        // Verify that WalletConnectProvider is loaded
-        if (typeof WalletConnectProvider === 'undefined') {
-            console.error("WalletConnectProvider failed to load.");
-            alert("Failed to load WalletConnectProvider. Please check your internet connection and try again.");
+        // Verify that MetaMask is installed
+        if (typeof window.ethereum === 'undefined') {
+            console.error("MetaMask is not installed.");
+            alert("MetaMask is not installed. Please install MetaMask and try again.");
         } else {
-            console.log("WalletConnectProvider successfully loaded.");
+            console.log("MetaMask is available.");
         }
 
         // Attach transferTokens function to the form submission

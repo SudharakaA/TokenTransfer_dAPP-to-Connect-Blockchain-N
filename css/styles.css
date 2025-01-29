@@ -5,6 +5,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Optional: Enhance styles to match web3-crypto-wallet */
 .container {
     background: linear-gradient(135deg, #ffffff, #e6f7ff);
     padding: 30px;

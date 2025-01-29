@@ -14,40 +14,19 @@ console.log("WalletConnectProvider loaded:", window.WalletConnectProvider);
 
 // Function to initialize connection only if ethers and WalletConnectProvider are available
 async function connectWallet() {
-    if (!window.ethers) {
-        console.error("Ethers.js is not loaded.");
-        alert("Ethers.js is not loaded. Please refresh the page.");
-        return;
-    }
-    if (!window.WalletConnectProvider) {
-        console.error("WalletConnectProvider is not loaded.");
-        alert("WalletConnectProvider is not loaded. Please refresh the page.");
+    if (!window.ethereum) { // Check if MetaMask is installed
+        console.error("MetaMask is not installed.");
+        alert("MetaMask is not installed. Please install MetaMask and try again.");
         return;
     }
 
     try {
-        // Initialize WalletConnect Provider with actual Infura Project ID
-        provider = new window.WalletConnectProvider.default({ // Use .default for UMD build
-            infuraId: "9a450e0d11664d8d98f79f80f83e64c8" // <-- Replace with your actual Infura Project ID
-        });
-
-        console.log("WalletConnectProvider initialized:", provider);
-
-        // Optionally, add more logging to verify provider configuration
-        console.log("Provider configuration:", provider);
-
-        // Create an ethers provider using window.ethers
-        const web3Provider = new window.ethers.providers.Web3Provider(provider); // Access via window.ethers
-
-        console.log("Web3Provider created:", web3Provider);
-
-        console.log("Initializing WalletConnect Provider...");
-
-        // Enable session (triggers QR Code modal)
-        await provider.enable();
-        signer = web3Provider.getSigner();
-        const account = await signer.getAddress(); // Get the account address
-        contract = new window.ethers.Contract(contractAddress, abi, signer); // Access via window.ethers
+        // Request account access
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        signer = provider.getSigner();
+        const account = await signer.getAddress();
+        contract = new ethers.Contract(contractAddress, abi, signer);
 
         console.log(`Connected account: ${account}`);
 
@@ -60,7 +39,7 @@ async function connectWallet() {
         console.log(`Signature received: ${signature}`);
 
         // Verify the signature to ensure authenticity
-        const recoveredAddress = window.ethers.utils.verifyMessage(message, signature); // Access via window.ethers.utils
+        const recoveredAddress = ethers.utils.verifyMessage(message, signature);
         if (recoveredAddress.toLowerCase() === account.toLowerCase()) {
             // Signature is valid
             console.log("Signature verification successful.");
@@ -75,15 +54,23 @@ async function connectWallet() {
             displayVerificationStatus(false, account);
         }
 
-        // Listen for disconnect
-        provider.on("disconnect", (code, reason) => {
-            console.log(`Disconnected: ${code}, Reason: ${reason}`);
-            resetApp();
+        // Listen for account changes
+        window.ethereum.on('accountsChanged', (accounts) => {
+            if (accounts.length === 0) {
+                resetApp();
+                alert("Please connect to MetaMask.");
+            } else {
+                connectWallet();
+            }
+        });
+
+        // Listen for chain changes
+        window.ethereum.on('chainChanged', (chainId) => {
+            window.location.reload();
         });
 
     } catch (error) {
-        console.error("Connection or authentication failed: ", error.message); // Enhanced logging
-        // Optionally, display detailed error to user for easier debugging
+        console.error("Connection or authentication failed:", error.message);
         alert(`Failed to connect or authenticate: ${error.message}`);
     }
 }
@@ -167,7 +154,9 @@ async function transferTokens(event) {
 
     try {
         const tx = await contract.transfer(recipient, window.ethers.utils.parseUnits(amount, 18)); // Changed to window.ethers.utils
+        console.log("Transaction sent: ", tx.hash); // Added logging
         await tx.wait();
+        console.log("Transaction confirmed: ", tx.hash); // Added logging
         alert("Transfer Successful");
         updateBalance();
     } catch (error) {
@@ -200,5 +189,4 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // Add the following lines to attach the connectWallet function to the Connect Wallet button
-document.getElementById("connectWallet").addEventListener("click", connectWallet);// Add the following lines to attach the connectWallet function to the Connect Wallet button
 document.getElementById("connectWallet").addEventListener("click", connectWallet);
