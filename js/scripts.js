@@ -16,9 +16,6 @@ console.log("WalletConnectProvider loaded:", window.WalletConnectProvider);
 async function connectWallet() {
     if (!window.ethers) {
         console.error("Ethers.js is not loaded.");
-async function connectWallet() {
-    if (!window.ethers) {
-        console.error("Ethers.js is not loaded.");
         alert("Ethers.js is not loaded. Please refresh the page.");
         return;
     }
@@ -28,6 +25,9 @@ async function connectWallet() {
         return;
     }
 
+    try {
+        // Initialize WalletConnect Provider with actual Infura Project ID
+        provider = new window.WalletConnectProvider.default({ // Use .default for UMD build
             infuraId: "9a450e0d11664d8d98f79f80f83e64c8" // <-- Replace with your actual Infura Project ID
         });
 
@@ -200,7 +200,5 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // Add the following lines to attach the connectWallet function to the Connect Wallet button
-document.getElementById("connectWallet").addEventListener("click", connectWallet);
-
-// Add the following lines to attach the connectWallet function to the Connect Wallet button
+document.getElementById("connectWallet").addEventListener("click", connectWallet);// Add the following lines to attach the connectWallet function to the Connect Wallet button
 document.getElementById("connectWallet").addEventListener("click", connectWallet);
