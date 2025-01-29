@@ -27,11 +27,14 @@ async function connectWallet() {
 
     try {
         // Initialize WalletConnect Provider with actual Infura Project ID
-        provider = new window.WalletConnectProvider.default({ // Use .default for UMD build
-            infuraId: "YOUR_ACTUAL_INFURA_PROJECT_ID" // <-- Ensure this is your actual Infura Project ID
+        provider = new window.WalletConnectProvider({ // Removed .default
+            infuraId: "9a450e0d11664d8d98f79f80f83e64c8" // <-- Replace with your actual Infura Project ID
         });
 
         console.log("WalletConnectProvider initialized:", provider);
+
+        // Optionally, add more logging to verify provider configuration
+        console.log("Provider configuration:", provider);
 
         // Create an ethers provider using window.ethers
         const web3Provider = new window.ethers.providers.Web3Provider(provider); // Access via window.ethers
