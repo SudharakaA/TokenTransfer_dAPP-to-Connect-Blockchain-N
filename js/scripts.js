@@ -133,7 +133,7 @@ async function updateBalance() {
         document.getElementById("balance").textContent = window.ethers.utils.formatUnits(balance, 18);
     } catch (error) {
         console.error("Failed to fetch balance:", error);
-        
+        // Removed 
     }
 }
 
